@@ -7,10 +7,12 @@ How to run polars locally (linux) for EDA on data from Databricks Unity Catalog
 
 ### On your local machine
 
-1. Have a python version installed
-2. If first time, run commands in devops/bootstrap.sh. If already instantiated, run devops/start_environment.sh
+1. Have a python version installed (see .python-version)
+2. If this is the first time, run the commands in devops/bootstrap.sh. If you have already installed the dependences, run the commands in devops/start_environment.sh
 3. Create a file called devops/.env filling the values left as placeholder in devops/.env.example
+4. Open jupyter notebook example.ipynb, fill in with the table you want to read and the columns you want to agg with
 
+Note that the example notebook shows that you can prune columns as well as do predicate pushdown
 
 ### On databricks UC 
 
@@ -45,10 +47,11 @@ However, accessing directly storage, apart from the complexity it entails to dea
 
 ## Limitations
 
-Even though 
+Polars has demonstrated to be very fast for small/medium data compared to spark. Moreover, Polars allows to execute in eager or in lazy mode (optimizations). Lazy mode helps performing predicate pushdown and column pruning, which is critical to reduce disk I/O. The issue with this repository is that because we use deltalake library and pyarrow to read the delta table, polars is unable to pass down these optimizations and it is required for the user to specify that smartly when reading the data. 
 
-Predicate pushdown --> you have to do it yourself 
-Filter columns 
+Probably the development of https://docs.pola.rs/api/python/stable/reference/catalog/api/polars.Catalog.html#polars.Catalog will lead to having that integrated, but at the loss of not having an abstraction for any processing engine like deltalake library does. 
+
+As a consequence, spark might be faster than polars, if the user is not able to specify the partition columns and predicate pushdown, since spark resolves this automatically during the query plan. 
 
 # Value proposition: Why run this locally / out of Databricks?
 
