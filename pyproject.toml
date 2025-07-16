@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "deltalake>=1.1.0",
+    "ipykernel>=6.29.5",
     "polars>=1.31.0",
     "pyarrow>=20.0.0",
     "python-dotenv>=1.1.1",

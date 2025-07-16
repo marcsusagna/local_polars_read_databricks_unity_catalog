@@ -7,7 +7,9 @@ How to run polars locally (linux) for EDA on data from Databricks Unity Catalog
 
 ### On your local machine
 
-1: Have a python version installed
+1. Have a python version installed
+2. If first time, run commands in devops/bootstrap.sh. If already instantiated, run devops/start_environment.sh
+3. Create a file called devops/.env filling the values left as placeholder in devops/.env.example
 
 
 ### On databricks UC 
