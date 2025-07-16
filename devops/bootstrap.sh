@@ -12,5 +12,5 @@ python3 -m pip install "uv${UV_VERSION}"
 
 # Installing venv for the project
 uv venv -p "${PYTHON_VERSION}" .venv
-source .venv/bin/activate
 uv sync
+source .venv/bin/activate

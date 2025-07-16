@@ -8,7 +8,7 @@ How to run polars locally (linux) for EDA on data from Databricks Unity Catalog
 ### On your local machine
 
 1. Have a python version installed (see .python-version)
-2. If this is the first time, run the commands in devops/bootstrap.sh. If you have already installed the dependences, run the commands in devops/start_environment.sh
+2. If this is the first time, run the commands in devops/bootstrap.sh. 
 3. Create a file called devops/.env filling the values left as placeholder in devops/.env.example
 4. Open jupyter notebook example.ipynb, fill in with the table you want to read and the columns you want to agg with
 
