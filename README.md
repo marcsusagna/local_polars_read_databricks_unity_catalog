@@ -7,19 +7,19 @@ How to run polars locally for EDA on data from Databricks Unity Catalog
 
 ## Prerequisites
 
-This solution is based credential vending, so see here https://docs.azure.cn/en-us/databricks/external-access/credential-vending#requirements to understand the prerequisites. 
+This solution is based credential vending, so see [Credential Vending](https://docs.azure.cn/en-us/databricks/external-access/credential-vending#requirements) to understand the prerequisites. 
 
 ## Components used
 
 ### Arrow
 
-Spark 4 has made a major effort to improve interaction with PyArrow better. See here https://spark.apache.org/docs/latest/api/python/tutorial/sql/arrow_pandas.html as well as this method https://spark.apache.org/docs/latest//api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.toArrow.html (claimed to be released in Spark 4, even though late spark 3.5 version also include it). 
+Spark 4 has made a major effort to improve interaction with PyArrow better. See here [Spark 4 Arrow](https://spark.apache.org/docs/latest/api/python/tutorial/sql/arrow_pandas).html as well as this method [toArrow](https://spark.apache.org/docs/latest//api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.toArrow.html) (claimed to be released in Spark 4, even though late spark 3.5 version also include it). 
 
 In parallel, Arrow is gaining popularity to read parquet files from disk directly into memory for any other data processing framework, like Polars or Duckdb. 
 
 ### delta-rs
 
-See https://github.com/delta-io/delta-rs. This library is facilitating the interaction with a delta lake (Unity Catalog or any other solution for it). It abstracts the complexity to connect, for instance, to Unity Catalog, by leveraging the UC API. 
+See [delta-rs](https://github.com/delta-io/delta-rs). This library is facilitating the interaction with a delta lake (Unity Catalog or any other solution for it). It abstracts the complexity to connect, for instance, to Unity Catalog, by leveraging the UC API. 
 
 In particular, in this repository we use pyarrow to bring a delta table into arrow and then load it into polars. Similar can be done for duckdb
 
@@ -27,7 +27,7 @@ In particular, in this repository we use pyarrow to bring a delta table into arr
 
 ## Read UC objects directly from polars
 
-Polars is looking into this directly (https://docs.pola.rs/api/python/stable/reference/catalog/api/polars.Catalog.html#polars.Catalog) so we don't need to use deltalake library. However, it is marked unstable as of July 2025 and you would be locking yourself into polars, when a local client could be using other tools like duckdb, pandas or daft. I recommend reading this https://delta.io/blog/delta-lake-without-spark/ to understand this flexibility .
+Polars is looking into this directly ([Polars UC](https://docs.pola.rs/api/python/stable/reference/catalog/api/polars.Catalog.html#polars.Catalog)) so we don't need to use deltalake library. However, it is marked unstable as of July 2025 and you would be locking yourself into polars, when a local client could be using other tools like duckdb, pandas or daft. I recommend reading this [Delta without spark](https://delta.io/blog/delta-lake-without-spark/) to understand this flexibility .
 
 ## Bypass UC and access cloud storage directly
 
@@ -62,7 +62,7 @@ This is particularly important in Single Node clusters, where driver and executo
 - OS & linux processes ~ 2 GB. Reamining: 16 - 2= 14GB. 
 - Heap memory for executor (JVM Heap Space): This is defined based on the VM type chosen. These limits are enforced by Databricks based on heuristics. In particular: (memory_size\*0.97 - 4800 MB)\* 0.8 (https://kb.databricks.com/en_US/clusters/spark-shows-less-memory). This relates vaguely to the setting spark.executor.memory, which you can't increase when defining your cluster in databricks (see that for this specific VM type, it is capped to 8874 MB)
 - So our executor process (JVM Heap Space) has roughly (14000\*0.97 - 4800)\*0.8 = 7024 MB
-- From here we need to define how much is available for Execution and Storage Memory (M) (see [DeltaTable](https://spark.apache.org/docs/latest/tuning.html#memory-management-overview)). The amount of memory for these is: (JVM Heap Space - 300MB)\*spark.memory.fraction. Let's take the 7024 MB as JVM Heap Space for default settings: then M = (7024 - 300) \* 0.6 = 4034 MB. 
+- From here we need to define how much is available for Execution and Storage Memory (M) (see [Memory Management](https://spark.apache.org/docs/latest/tuning.html#memory-management-overview)). The amount of memory for these is: (JVM Heap Space - 300MB)\*spark.memory.fraction. Let's take the 7024 MB as JVM Heap Space for default settings: then M = (7024 - 300) \* 0.6 = 4034 MB. 
 - From this memory the execution memory can take at most M*spark.memory.storageFraction, so in our case for default settings: 4034\*0.5=2017
 
 As we can see, from 16GB of RAM in a VM we ended up using only 2 GB at most for execution (joins, groupby, etc...) as it can't take the 2GB reserved for caching (spark.memory.storageFraction). Similarly we can't store in memory more than this threshold as well, since M is limited to 4034. Note the numbers above are to give a rough idea, we are using GB instead of GiB (this is how spark configuration is defined) and we don't have the exact numbers from Databricks heuristics. However, you can see this estimated numbers directly from your spark UI > executors > Storage Memory. 
