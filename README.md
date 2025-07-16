@@ -1,11 +1,16 @@
 # Description
-How to run polars locally for EDA on data from Databricks Unity Catalog
+How to run polars locally (linux) for EDA on data from Databricks Unity Catalog
 
 # How does this work
 
-
-
 ## Prerequisites
+
+### On your local machine
+
+1: Have a python version installed
+
+
+### On databricks UC 
 
 This solution is based credential vending, so see [Credential Vending](https://docs.azure.cn/en-us/databricks/external-access/credential-vending#requirements) to understand the prerequisites. 
 
