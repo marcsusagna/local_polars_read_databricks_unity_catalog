@@ -16,7 +16,10 @@ Note that the example notebook shows that you can prune columns as well as do pr
 
 ### On databricks UC 
 
-This solution is based credential vending, so see [Credential Vending](https://docs.azure.cn/en-us/databricks/external-access/credential-vending#requirements) to understand the prerequisites. 
+- This solution is based credential vending, so see [Credential Vending](https://docs.azure.cn/en-us/databricks/external-access/credential-vending#requirements) to understand the prerequisites. 
+
+- Currently one can't read delta tables with deletion vectors, see https://learn.microsoft.com/en-us/azure/databricks/delta/deletion-vectors and https://learn.microsoft.com/en-us/azure/databricks/delta/drop-feature on how to disable them for your table
+
 
 ## Components used
 
